@@ -1,5 +1,10 @@
 grammar MiniLang;
 
+@header {
+package tp.tp_interprete;
+}
+
+
 //parser
 program: 
 	PROGRAM ID OPEN_BRACE 
