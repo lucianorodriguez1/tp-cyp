@@ -1,53 +1,54 @@
 grammar MiniLang;
 
+//parser
 program: 
-	PROGRAMA ID LLAVE_ABRE 
-		sentencia*
-	LLAVE_CIERRA;
+	PROGRAM ID OPEN_BRACE 
+		sentence*
+	CLOSE_BRACE;
 
-sentencia: 
-	declaracion | asignacion | condicional | switch | impresion;
+sentence: 
+	declaration | assignment | condition | switch | print;
 
-declaracion: 
-	VAR TIPO ID PUNTO_COMA;
+declaration: 
+	VAR TYPE ID SEMICOLON;
 	
-asignacion: 
-	ID ASIG expresion PUNTO_COMA;
+assignment: 
+	ID ASSIGN expression SEMICOLON;
 
-condicional:
-	IF PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE 
-		sentencia+ 
-	LLAVE_CIERRA
-	(ELSE LLAVE_ABRE sentencia+ LLAVE_CIERRA)?; // ?puede haber else o no
+condition:
+	IF OPEN_PARENT expression CLOSE_PARENT OPEN_BRACE
+		sentence+ 
+	CLOSE_BRACE
+	(ELSE OPEN_BRACE sentence+ CLOSE_BRACE)?; // ?puede haber else o no
 
 switch:
-	SWITCH PARENTESIS_ABRE expresion PARENTESIS_CIERRA LLAVE_ABRE 
-		casos_sw+ default_sw? 
-	LLAVE_CIERRA;
+	SWITCH OPEN_PARENT expression CLOSE_PARENT OPEN_BRACE 
+		cases_sw+ default_sw? 
+	CLOSE_BRACE;
 
-casos_sw:
-	CASE expresion DOS_PUNTOS 
-		sentencia+ 
-		(BREAK PUNTO_COMA)?;
+cases_sw:
+	CASE expression COLON 
+		sentence+ 
+		(BREAK SEMICOLON)?;
 
 default_sw: 
-	DEFAULT DOS_PUNTOS 
-		sentencia+;
+	DEFAULT SEMICOLON 
+		sentence+;
 
-expresion: 
-	PARENTESIS_ABRE expresion PARENTESIS_CIERRA #Parentesis
-	| expresion (MULT | DIV | MOD) expresion #MultiplicacionDivisionMod
-	| expresion (SUMA | RESTA) expresion #SumaResta
-	| expresion (MAYOR | MENOR | MAYOR_IGUAL | MENOR_IGUAL | IGUAL_QUE | DISTINTO) expresion #Comparacion
-	| expresion (Y | O) expresion #Logica
-	| NO expresion #Negacion
+expression: 
+	OPEN_PARENT expression CLOSE_PARENT #Parenthesis
+	| expression (MULT | DIV ) expression #MultiplicationDivision
+	| expression (PLUS | MINUS) expression #PlusMinus
+	| expression (GT | LT | GTE | LTE | EQUAL | NOTEQUAL) expression #Comparison
+	| expression (AND | OR) expression #Logic
+	| NOT expression #Negation
 	| ID #Variable
-	| INT #Entero
+	| INT #Integer
 	| FLOAT #Decimal
-	| STRING #Cadena
-	| BOOLEAN #Booleano;
+	| STRING #String
+	| BOOLEAN #Boolean;
 	
-impresion: PRINT PARENTESIS_ABRE expresion PARENTESIS_CIERRA PUNTO_COMA;
+print: PRINT OPEN_PARENT expression CLOSE_PARENT SEMICOLON;
 
 //lexer	
 // palabras reservadas
@@ -62,51 +63,48 @@ DEFAULT: 'default';
 BREAK: 'break';
 
 //operadores aritmeticos
-SUMA: '+';
-RESTA: '-';
+PLUS: '+';
+MINUS: '-';
 MULT: '*';
 DIV: '/';
-MOD: '%';
 
 //logicos
-Y: '&&';
-O: '||';
-NO: '!';
+AND: '&&';
+OR: '||';
+NOT: '!';
 
 //comparacion
-MAYOR: '>';
-MENOR: '<';
-MAYOR_IGUAL: '>=';
-MENOR_IGUAL: '<=';
-IGUAL_QUE: '==';
-DISTINTO: '!=';
+GT: '>';
+LT: '<';
+GTE: '>=';
+LTE: '<=';
+EQUAL: '==';
+NOTEQUAL: '!=';
 
 //tipos de dato
-TIPO: 'int'|'float'|'string'|'boolean';
+TYPE: 'int'|'float'|'string'|'boolean';
 BOOLEAN: 'true'|'false';
 INT: [0-9]+;
 FLOAT: [0-9]+'.'[0-9]+;
 STRING: '"' (~[\r\n"])* '"';
 
 //asignar
-ASIGNAR: '=';
+ASSIGN: '=';
 
 //puntuacion
-LLAVE_ABRE: '{';
-LLAVE_CIERRA: '}';
-CORCHETE_ABRE: '[';
-CORCHETE_CIERRA: ']';
-PARENTESIS_ABRE: '(';
-PARENTESIS_CIERRA: ')';
-PUNTO_COMA: ';';
-DOS_PUNTOS: ':';
+OPEN_BRACE: '{';
+CLOSE_BRACE: '}';
+OPEN_PARENT: '(';
+CLOSE_PARENT: ')';
+SEMICOLON: ';';
+COLON: ':';
 
 //identificadores
 ID: [a-zA-Z][a-zA-Z0-9_]*; //nombres de variables y programa
 
 //comentarios
-COMENTARIO: '//' ~[\r\n]* -> skip;
-COMENTARIO_MULTILINEA: '**' .*? '**' -> skip;
+COMMENT: '//' ~[\r\n]* -> skip;
+MULTILINE_COMMENT: '**' .*? '**' -> skip;
 
 //espacios en blanco/tabulaciones
 WS: [ \t\n\r]+ -> skip;
