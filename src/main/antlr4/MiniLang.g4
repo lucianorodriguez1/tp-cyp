@@ -1,6 +1,6 @@
 grammar MiniLang;
 
-programa: 
+program: 
 	PROGRAMA ID LLAVE_ABRE 
 		sentencia*
 	LLAVE_CIERRA;
@@ -51,8 +51,8 @@ impresion: PRINT PARENTESIS_ABRE expresion PARENTESIS_CIERRA PUNTO_COMA;
 
 //lexer	
 // palabras reservadas
-PROGRAMA: 'PROGRAM';
-VAR: 'var'; //para definir 
+PROGRAM: 'program';
+VAR: 'var'; 
 PRINT: 'print';
 IF: 'if';
 ELSE: 'else';
@@ -89,7 +89,7 @@ FLOAT: [0-9]+'.'[0-9]+;
 STRING: '"' (~[\r\n"])* '"';
 
 //asignar
-ASIG: '=';
+ASIGNAR: '=';
 
 //puntuacion
 LLAVE_ABRE: '{';
