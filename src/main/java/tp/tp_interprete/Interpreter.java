@@ -10,7 +10,7 @@ public class Interpreter extends MiniLangBaseVisitor<Object>{
 	@Override
 	public Object visitProgram (ProgramContext progCtx) {
 		//print para ver inicializacion de ejecucion
-		System.out.println("Interprete, ejecucion inicio con exito");
+		System.out.println("Intérprete, ejecución inicio con exito");
 		
 		for (SentenceContext sentenceCtx: progCtx.sentence()) {
 			visit(sentenceCtx);//ejecuta linea por linea

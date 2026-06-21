@@ -54,4 +54,8 @@ public class SymbolTable {
 		}
 		return values.get(name);
 	}
+	
+	public String getType(String name) { 
+		return types.get(name); 
+	}
 }

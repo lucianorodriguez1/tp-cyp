@@ -2,32 +2,62 @@ package tp.tp_interprete;
 
 import tp.tp_interprete.MiniLangParser.*;
 
-public class SemanticAnalyzer extends MiniLangBaseVisitor<Object> {
+public class SemanticAnalyzer extends MiniLangBaseVisitor<String> {
     
     private SymbolTable symbolTable = new SymbolTable();
 
+    // 1. REGISTRO DE VARIABLES
     @Override
-    public Object visitDeclaration(DeclarationContext ctx) {
-        String type = ctx.TYPE().getText(); // "int", "float", etc.
-        String id = ctx.ID().getText();     // nombre de la variable
+    public String visitDeclaration(DeclarationContext ctx) {
+        String type = ctx.TYPE().getText(); 
+        String id = ctx.ID().getText();   
         
         symbolTable.declaration(id, type);
     
         return null; 
     }
 
-
+    // 2. CONTROL DE ASIGNACIÓN
     @Override
-    public Object visitAssignment(AssignmentContext ctx) {
+    public String visitAssignment(AssignmentContext ctx) {
         String id = ctx.ID().getText();
         
-        Object value = visit(ctx.expression()); // o Object expressionType = visit(ctx.expression());
+        String variableType = symbolTable.getType(id); 
+        if (variableType == null) {
+            throw new RuntimeException("Error semántico: La variable '" + id + "' no ha sido declarada.");
+        }
         
-        // llamas al metodo de asignación
-        symbolTable.assign(id, value); //symbolTable.assign(id, expressionType);
+        String expressionType = visit(ctx.expression()); 
         
-        //porque en el semantico tendriamos que enfocarnos en los tipos y esas validaciones
-        //y lo de ya asignar los valores seria del interprete
+        if (!variableType.equals(expressionType)) {
+            throw new RuntimeException("Error semántico: No se puede asignar '" + expressionType + 
+                                       "' a la variable '" + id + "' de tipo '" + variableType + "'.");
+        }
+        
         return null;
     }
+    
+    // 3. PROPAGACIÓN DE TIPOS DESDE LAS HOJAS
+    @Override
+    public String visitInteger(IntegerContext ctx) {
+        return "int"; 
+    }
+
+    @Override
+    public String visitDecimal(DecimalContext ctx) {
+        return "float";
+    }
+
+    @Override
+    public String visitString(StringContext ctx) {
+        return "string";
+    }
+
+    @Override
+    public String visitBoolean(BooleanContext ctx) {
+        return "boolean";
+    }
+    
+    
+    
 }
