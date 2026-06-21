@@ -12,7 +12,7 @@ public class SemanticAnalyzer extends MiniLangBaseVisitor<Object> {
         String id = ctx.ID().getText();     // nombre de la variable
         
         symbolTable.declaration(id, type);
-        
+    
         return null; 
     }
 
@@ -21,11 +21,13 @@ public class SemanticAnalyzer extends MiniLangBaseVisitor<Object> {
     public Object visitAssignment(AssignmentContext ctx) {
         String id = ctx.ID().getText();
         
-        Object value = visit(ctx.expression());
+        Object value = visit(ctx.expression()); // o Object expressionType = visit(ctx.expression());
         
         // llamas al metodo de asignación
-        symbolTable.assign(id, value);
+        symbolTable.assign(id, value); //symbolTable.assign(id, expressionType);
         
+        //porque en el semantico tendriamos que enfocarnos en los tipos y esas validaciones
+        //y lo de ya asignar los valores seria del interprete
         return null;
     }
 }
