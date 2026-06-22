@@ -1,0 +1,14 @@
+program Pruebaas {
+	var int a;
+	var int b;
+	var int c;
+	
+	a = 5;
+	b = 0;
+	print (a);
+	print (b);
+	
+	c = a / b; 
+	print ("Division", c);
+	
+}

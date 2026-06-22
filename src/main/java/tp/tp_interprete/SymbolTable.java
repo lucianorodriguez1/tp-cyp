@@ -37,7 +37,7 @@ public class SymbolTable {
 	//declaracion 
 	public void declaration(String name, String type) {
 		//no redeclarar si ya existe
-		if (values.containsKey(name)) {
+		if (values.containsKey(name) && values.get(name)!= null) {
 			throw new RuntimeException ("Error la variable " + name + " ya existe" );
 		}
 			
@@ -58,4 +58,5 @@ public class SymbolTable {
 	public String getType(String name) { 
 		return types.get(name); 
 	}
+
 }

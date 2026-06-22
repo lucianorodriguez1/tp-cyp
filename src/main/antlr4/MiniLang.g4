@@ -53,7 +53,7 @@ expression:
 	| STRING #String
 	| BOOLEAN #Boolean;
 	
-print: PRINT OPEN_PARENT expression CLOSE_PARENT SEMICOLON;
+print: PRINT OPEN_PARENT expression (COMMA expression)* CLOSE_PARENT SEMICOLON;
 
 //lexer	
 // palabras reservadas
@@ -103,6 +103,7 @@ OPEN_PARENT: '(';
 CLOSE_PARENT: ')';
 SEMICOLON: ';';
 COLON: ':';
+COMMA: ',';
 
 //identificadores
 ID: [a-zA-Z][a-zA-Z0-9_]*; //nombres de variables y programa

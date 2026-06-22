@@ -4,7 +4,13 @@ import tp.tp_interprete.MiniLangParser.*;
 
 
 public class Interpreter extends MiniLangBaseVisitor<Object>{
-	private SymbolTable symbolTable = new SymbolTable();
+	
+	//agrego constructor para pasar una unica tabla creada en el app.java
+	private SymbolTable symbolTable;
+	
+	public Interpreter (SymbolTable symbolTable) {
+		this.symbolTable = symbolTable;
+	}
 	
 	//programa completo 
 	@Override
@@ -37,15 +43,75 @@ public class Interpreter extends MiniLangBaseVisitor<Object>{
 		return null;
 	}
 	
-	//print
+	
+	//if y else
 	@Override
-	public Object visitPrint(PrintContext printCtx) {
-		Object val = visit(printCtx.expression());
-		System.out.println("> " + val);
+	public Object visitCondition(ConditionContext condCtx) {
+		//evalua  la condicion del if 
+		boolean valorCond = (Boolean) visit(condCtx.expression());
+		
+		if (valorCond) { //true
+			for (SentenceContext sentenceCtx: condCtx.sentence()) { //ejecuta sentencis del if verdadero
+				visit(sentenceCtx);
+			}
+		}else if (condCtx.ELSE() != null) { // condicion falsa, entra al else
+			boolean encuentraElse = false; //se cuando encuntra el else
+			int sentenAntesElse = 0; // cant de sentencias antes de llegar al else
+			
+			for (int i = 0; i < condCtx.getChildCount(); i++) {
+				if (condCtx.getChild(i).getText().equals("else")) {
+					encuentraElse = true;// encontro el else
+					continue;
+				}
+				if (condCtx.getChild(i) instanceof SentenceContext && !encuentraElse) {
+					sentenAntesElse++;
+				}
+			}
+			for (int i = sentenAntesElse; i < condCtx.sentence().size(); i++) {
+				visit(condCtx.sentence(i)); //ejecuta solo las sentencias despues del else
+			}
+		}
 		return null;
 	}
 	
-	//las etiquetas con # del minilang
+	//variante switch
+	@Override
+	public Object visitSwitch(SwitchContext swCtx) {
+		Object valorSw = visit(swCtx.expression()); //guarda el valor de condicion del switch
+		boolean casoEjec = false; //sirve como bandera para marcar si ya ejecuto elcase correspondiente y no seguir por los demas
+		
+		for (Cases_swContext caseCtx: swCtx.cases_sw()) {
+			Object valorCase = visit(caseCtx.expression()); //guarda valor de cada case
+			
+			if (valorSw.equals(valorCase)) {
+				for (SentenceContext sentenceCtx: caseCtx.sentence()) { //ejecuta las sentencias solo del case que corresponde
+					visit(sentenceCtx);
+				}
+				casoEjec = true; //cambia bandera
+				break; //sale
+			}
+		}
+		
+		if (!casoEjec && swCtx.default_sw()!= null) {
+			visit(swCtx.default_sw()); // si el casoEjec sigue en falso usa el default porque no paso por ningun case
+		}
+		return null;
+	}
+	
+	//print
+	@Override
+	public Object visitPrint(PrintContext printCtx) {
+		//fpr para recorrer todas las expresiones del print
+		for (ExpressionContext expCtx: printCtx.expression()) {
+			Object val = visit(expCtx);
+			System.out.print(val + " ");
+		}
+		System.out.println();//salto linea
+		return null;
+	}
+	
+	
+	//las etiquetas con #  de las expresiones del minilang
 	//#parentesis
 	@Override
 	public Object visitParenthesis (ParenthesisContext parCtx) {
@@ -76,6 +142,16 @@ public class Interpreter extends MiniLangBaseVisitor<Object>{
 		Object der = visit(multDivCtx.expression(1));
 		String opcion = multDivCtx.getChild(1).getText();
 		
+		//division por cero
+		if (opcion.equals("/")) {
+			if (der instanceof Integer && (Integer) der == 0) {
+				throw new RuntimeException ("Error no se puede dividir por cero");
+			}
+			if (der instanceof Double && (Double) der == 0.0) {
+				throw new RuntimeException ("Error no se puede dividir por cero");
+			}
+		}
+				
 		if (izq instanceof Integer && der instanceof Integer) {
 			return opcion.equals("*") ? (Integer) izq * (Integer) der : (Integer) izq / (Integer) der;
 		} else {

@@ -4,8 +4,12 @@ import tp.tp_interprete.MiniLangParser.*;
 
 public class SemanticAnalyzer extends MiniLangBaseVisitor<String> {
 
-	private SymbolTable symbolTable = new SymbolTable();
+	//agrego constructor para pasar una unica tabla creada en el app.java
+	private SymbolTable symbolTable;
 	
+	public SemanticAnalyzer (SymbolTable symbolTable) {
+		this.symbolTable = symbolTable;
+	}
 	
 	// 0. RECORRIDO DEL PROGRAMA
     @Override
@@ -147,8 +151,18 @@ public class SemanticAnalyzer extends MiniLangBaseVisitor<String> {
 
 	@Override
 	public String visitMultiplicationDivision(MultiplicationDivisionContext ctx) {
+		String izq = visit (ctx.expression(0));
+		String der = visit (ctx.expression(1));
+		
+		if (izq.equals("int")&& der.equals("int")) {
+			return "int";
+		}
+		if (izq.equals("float")&& der.equals("float")) {
+			return "float";
+		}
+		throw new RuntimeException ("Error semántico: Operación aritmética no permitida entre " + izq + " y " + der);
 		// Usa exactamente las mismas reglas de tipos que la suma y resta
-		return visitPlusMinus((PlusMinusContext) (Object) ctx);
+		//return visitPlusMinus((PlusMinusContext) (Object) ctx);
 	}
 
 	@Override
@@ -190,7 +204,9 @@ public class SemanticAnalyzer extends MiniLangBaseVisitor<String> {
 	// 6. SENTENCIAS COMPLEMENTARIAS
 	@Override
 	public String visitPrint(PrintContext ctx) {
-		visit(ctx.expression());
+		for (ExpressionContext expCtx: ctx.expression()) {
+			visit(expCtx);
+		}
 		return null;
 	}
 
