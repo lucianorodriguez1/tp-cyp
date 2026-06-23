@@ -52,7 +52,7 @@ mvn clean compile
 CharStream input = CharStreams.fromFileName("programaPrueba.txt");
 ```
 
-3. ** Ejecutar la aplicacion**:
+3. **Ejecutar la aplicacion**:
    * Una vez guardado el cambio en App.java ya se puede ejecutar el programa mediante:
 ```bash
 mvn exec:java -Dexec.mainClass="tp.tp_interprete.App"
