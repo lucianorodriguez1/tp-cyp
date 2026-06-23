@@ -1,5 +1,7 @@
 package tp.tp_interprete;
 
+import org.antlr.v4.runtime.tree.ParseTree;
+
 import tp.tp_interprete.MiniLangParser.*;
 
 
@@ -15,8 +17,6 @@ public class Interpreter extends MiniLangBaseVisitor<Object>{
 	//programa completo 
 	@Override
 	public Object visitProgram (ProgramContext progCtx) {
-		//print para ver inicializacion de ejecucion
-		System.out.println("Intérprete, ejecución inicio con exito");
 		
 		for (SentenceContext sentenceCtx: progCtx.sentence()) {
 			visit(sentenceCtx);//ejecuta linea por linea
@@ -47,28 +47,33 @@ public class Interpreter extends MiniLangBaseVisitor<Object>{
 	//if y else
 	@Override
 	public Object visitCondition(ConditionContext condCtx) {
-		//evalua  la condicion del if 
-		boolean valorCond = (Boolean) visit(condCtx.expression());
+		
+		boolean valorCond = (Boolean) visit(condCtx.expression());//evalua  la condicion del if 
 		
 		if (valorCond) { //true
-			for (SentenceContext sentenceCtx: condCtx.sentence()) { //ejecuta sentencis del if verdadero
-				visit(sentenceCtx);
+			for (int i = 0; i < condCtx.getChildCount(); i++) { //ejecuta sentencis del if verdadero
+				ParseTree nodo = condCtx.getChild(i); //cada nodo es una parte del codigo, mejor que usar el contador, 
+				//por ndos como { }, en el contador no los contaba, tenia en cuenta solo sentencias 
+				if (nodo.getText().equals("else")) { //cuando llega al else corta
+					break;
+				}
+				if (nodo instanceof SentenceContext) {
+					visit (nodo);
+				}
 			}
 		}else if (condCtx.ELSE() != null) { // condicion falsa, entra al else
 			boolean encuentraElse = false; //se cuando encuntra el else
-			int sentenAntesElse = 0; // cant de sentencias antes de llegar al else
+			
 			
 			for (int i = 0; i < condCtx.getChildCount(); i++) {
-				if (condCtx.getChild(i).getText().equals("else")) {
-					encuentraElse = true;// encontro el else
+				ParseTree nodo = condCtx.getChild(i); //evalua los nodos hasta encontrar el else
+				if (nodo.getText().equals("else")) {
+					encuentraElse = true; //bandera de que encontro el else
 					continue;
 				}
-				if (condCtx.getChild(i) instanceof SentenceContext && !encuentraElse) {
-					sentenAntesElse++;
+				if (encuentraElse && nodo instanceof SentenceContext) {
+					visit(nodo);
 				}
-			}
-			for (int i = sentenAntesElse; i < condCtx.sentence().size(); i++) {
-				visit(condCtx.sentence(i)); //ejecuta solo las sentencias despues del else
 			}
 		}
 		return null;

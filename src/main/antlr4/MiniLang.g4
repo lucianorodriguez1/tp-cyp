@@ -37,8 +37,9 @@ cases_sw:
 		(BREAK SEMICOLON)?;
 
 default_sw: 
-	DEFAULT SEMICOLON 
-		sentence+;
+	DEFAULT COLON 
+		sentence+
+		(BREAK SEMICOLON)?;
 
 expression: 
 	OPEN_PARENT expression CLOSE_PARENT #Parenthesis

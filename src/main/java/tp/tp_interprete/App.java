@@ -14,8 +14,8 @@ public class App
     		
     		//cargar archivo
     		System.out.println("Carga de archivo...");
-    		CharStream input = CharStreams.fromFileName("programaPrueba.txt");
-    		
+    		//CharStream input = CharStreams.fromFileName("pruebaFallidaTipos.txt");
+    		CharStream input = CharStreams.fromFileName("pruebaVariablesNoDeclaradas.txt");
     		//analisis lexico - tokens
     		MiniLangLexer lexer = new MiniLangLexer(input);
     		CommonTokenStream tokens = new CommonTokenStream(lexer);

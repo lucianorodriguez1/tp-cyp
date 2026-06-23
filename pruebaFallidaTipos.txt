@@ -1,0 +1,11 @@
+program PruebaFallidaTipos{
+	var int error;
+	var string mensaje;
+	
+	mensaje = "Hola mundo";
+	
+	error = "Este texto lo rompe :)";
+	
+	print (error);
+	
+}

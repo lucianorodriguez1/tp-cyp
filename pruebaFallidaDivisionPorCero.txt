@@ -1,0 +1,19 @@
+program PruebaDivCero{
+	var int a;
+	var int b;
+	
+	var int suma;
+	var int div;
+	
+	a = 10;
+	b = 2;
+	
+	suma = a + b;
+	print ("La suma es: ", suma);
+	div = suma/0;
+	print ("La division es: ", div);
+	
+
+
+
+}

@@ -1,0 +1,13 @@
+program PruebaIfOk{
+	var int edad;
+	var int mayorEdad;
+	
+	edad = 27;
+	mayorEdad = 18;
+	
+	if (edad > mayorEdad){
+		print ("Sos mayor de edad, tenes:", edad);
+	} else {
+		print ("Sos menor de edad, tenes:", edad);
+	}
+}

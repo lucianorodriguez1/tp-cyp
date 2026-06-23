@@ -1,0 +1,32 @@
+program PruebaCompleta{
+	var int nota;
+	var string grupo;
+	var int dia;
+	
+	grupo = "R";
+	nota = 8;
+	dia = 4;
+	
+	print ("El tp se entrega el dia Miercoles");
+	switch (dia){
+		case 1:
+			print ("Hoy es lunes todavia quedan dos dias..");
+			break;
+		case 2:
+			print ("Hoy es martes, ultimando detalles porque se entrega mañana!");
+		case 3:
+			print ("Hoy es miercoles!!! Se entrega hoy!");
+			print ("Su nota es..." , nota);
+			
+			if (nota >= 4){
+				print ("Grupo:", grupo, "APROBADO!");
+			} else {
+				print ("Grupo:", grupo, "DESAPROBADOS :(");
+			}
+		case 4:
+			print ("Hoy es jueves, se entrego ayer, su nota es: ", nota);
+	}
+	
+	
+
+}

@@ -1,0 +1,8 @@
+program PruebaVariablesNoDec{
+	 var string nombre;
+	 nombre = "More";
+	 edad = 21;
+	 print ("Nombre:", nombre);
+	 print ("Edad:", edad);
+
+}

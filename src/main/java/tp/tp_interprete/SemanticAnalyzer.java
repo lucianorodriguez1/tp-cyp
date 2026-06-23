@@ -204,8 +204,12 @@ public class SemanticAnalyzer extends MiniLangBaseVisitor<String> {
 	// 6. SENTENCIAS COMPLEMENTARIAS
 	@Override
 	public String visitPrint(PrintContext ctx) {
+		//evaluamos que todas las instrucciones del print sean validas por las dudas
 		for (ExpressionContext expCtx: ctx.expression()) {
-			visit(expCtx);
+			String tipo = visit(expCtx);
+			if (tipo == null) {
+				throw new RuntimeException("Error, elemento invalido en el print");
+			}
 		}
 		return null;
 	}
