@@ -99,9 +99,9 @@ program PruebaCompleta {
     }
 }
 ```
-* Salida esperada en la consola:
-*Carga de archivo...
-*Intérprete, ejecución inicio con exito
-*El tp se entrega el dia Miercoles 
-*Hoy es jueves, se entrego ayer, su nota es:  8 
-*Ejecucion ok!
+* **Salida esperada en la consola**:
+* Carga de archivo...
+* Intérprete, ejecución inicio con exito
+* El tp se entrega el dia Miercoles 
+* Hoy es jueves, se entrego ayer, su nota es:  8 
+* Ejecucion ok!
