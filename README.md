@@ -48,7 +48,9 @@ mvn clean compile
 ```
 2. **Elegir en el archivo de prueba**:
    * En `App.java` indicar el programa (archivo .txt) a ejecutar y colocar el nombre dentro de la linea del `CharStream`:
-   * CharStream input = CharStreams.fromFileName("programaPrueba.txt");
+```text
+CharStream input = CharStreams.fromFileName("programaPrueba.txt");
+```
 
 3. ** Ejecutar la aplicacion**:
    * Una vez guardado el cambio en App.java ya se puede ejecutar el programa mediante:
@@ -98,9 +100,8 @@ program PruebaCompleta {
 }
 ```
 * Salida esperada en la consola:
-  
-Carga de archivo...
-Intérprete, ejecución inicio con exito
-El tp se entrega el dia Miercoles 
-Hoy es jueves, se entrego ayer, su nota es:  8 
-Ejecucion ok!
+*Carga de archivo...
+*Intérprete, ejecución inicio con exito
+*El tp se entrega el dia Miercoles 
+*Hoy es jueves, se entrego ayer, su nota es:  8 
+*Ejecucion ok!
